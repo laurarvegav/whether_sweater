@@ -76,3 +76,23 @@ def check_hash_structure(object, key, data_type)
   expect(object).to have_key(key)
   expect(object[key]).to be_a(data_type)
 end
+
+require 'active_support/core_ext'
+
+def human_readable?(input)
+  parsed_time = begin
+    DateTime.parse(input)
+  rescue ArgumentError
+    begin
+      Time.parse(input)
+    rescue ArgumentError
+      nil
+    end
+  end
+  
+  return false if parsed_time.nil?
+  
+  formatted_time = parsed_time.to_formatted_s(:long)
+
+  true
+end
