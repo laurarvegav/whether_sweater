@@ -46,7 +46,7 @@ RSpec.describe "Search Controller" do
     end
 
     xit 'does not return unnecessary data for a city' do
-      
+      #Testing should also determine which fields should NOT be present. (don’t send unnecessary data)
     end
   end
 end
