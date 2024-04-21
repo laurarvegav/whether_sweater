@@ -82,7 +82,13 @@ end
 
 def check_hash_structure(object, key, data_type)
   expect(object).to have_key(key)
-  expect(object[key]).to be_a(data_type)
+  value = object[key]
+
+  case key
+  when :time
+    expect(value).to match(/\A\d{2}:\d{2}\z/)
+  end
+  expect(value).to be_a(data_type)
 end
 
 require 'active_support/core_ext'
