@@ -36,3 +36,9 @@
 
 # Ignore application configuration
 /config/application.yml
+
+#Ignore coverage reports
+/coverage/*
+
+#Ignore vcr fixtures
+/spec/fixtures/*
