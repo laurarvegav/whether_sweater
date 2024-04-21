@@ -1,6 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe WeatherService do
+  describe ".connection" do
+    it "successfully connects to weather api", :vcr do
+      connection = WeatherService.connection
+      expect(connection).to be_a(Faraday::Connection)
+    end
+  end
+
+  describe ".get_url" do
+    let!(:uri) { "v1/forecast.json?q=39.74001,-104.99202&days=5" }
+    it "returns correct response", :vcr do
+      data = WeatherService.get_url(uri)
+      
+      expect(data).to be_a(Hash)
+    end
+  end
 
   describe '.search' do
     coordinates = "39.74001,-104.99202"
@@ -26,46 +41,30 @@ RSpec.describe WeatherService do
 
       check_hash_structure(service, :forecast, Array)
       expect(service[:forecast].size).to eq(5)
-      service[:forecast].each do |service|
-        expect(service).to be_a(Hash)
-        check_hash_structure(service, :date_epoch, Integer)
+      service[:forecast].each do |day_service|
+        expect(day_service).to be_a(Hash)
+        check_hash_structure(day_service, :date_epoch, Integer)
 
-        check_hash_structure(service, :day, Hash)
-        check_hash_structure(service[:day], :maxtemp_f, Float || Integer)
-        check_hash_structure(service[:day], :mintemp_f, Float || Integer)
-        check_hash_structure(service[:day], :totalprecip_mm, Float || Integer)
-        check_hash_structure(service[:day][:condition], :text, String)
-        check_hash_structure(service[:day][:condition], :icon, String)
+        check_hash_structure(day_service, :day, Hash)
+        check_hash_structure(day_service[:day], :maxtemp_f, Float || Integer)
+        check_hash_structure(day_service[:day], :mintemp_f, Float || Integer)
+        check_hash_structure(day_service[:day], :totalprecip_mm, Float || Integer)
+        check_hash_structure(day_service[:day][:condition], :text, String)
+        check_hash_structure(day_service[:day][:condition], :icon, String)
 
-        check_hash_structure(service, :astro, Hash)
-        check_hash_structure(service[:astro], :sunrise, String)
-        check_hash_structure(service[:astro], :sunset, String)
+        check_hash_structure(day_service, :astro, Hash)
+        check_hash_structure(day_service[:astro], :sunrise, String)
+        check_hash_structure(day_service[:astro], :sunset, String)
 
-        check_hash_structure(service, :hour, Array)
-        expect(service[:hour].size).to eq(24)
-        check_hash_structure(service[:hour].first, :time_epoch, Integer)
-        check_hash_structure(service[:hour].first, :temp_f, Float || Integer)
-        check_hash_structure(service[:hour].first[:condition], :text, 
+        check_hash_structure(day_service, :hour, Array)
+        expect(day_service[:hour].size).to eq(24)
+        check_hash_structure(day_service[:hour].first, :time_epoch, Integer)
+        check_hash_structure(day_service[:hour].first, :temp_f, Float || Integer)
+        check_hash_structure(day_service[:hour].first[:condition], :text, 
         String)
-        check_hash_structure(service[:hour].first[:condition], :icon, 
+        check_hash_structure(day_service[:hour].first[:condition], :icon, 
         String)
       end
-    end
-  end
-
-  describe ".get_url" do
-    let!(:uri) { "v1/forecast.json?q=39.74001,-104.99202&days=5" }
-    it "returns correct response", :vcr do
-      data = WeatherService.get_url(uri)
-      
-      expect(data).to be_a(Hash)
-    end
-  end
-
-  describe ".connection" do
-    it "successfully connects to weather api", :vcr do
-      connection = WeatherService.connection
-      expect(connection).to be_a(Faraday::Connection)
     end
   end
 end
