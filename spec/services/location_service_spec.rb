@@ -31,7 +31,7 @@ RSpec.describe LocationService do
   end
 
   describe ".connection" do
-    it "successfully connects to mapquest geocoding" do
+    it "successfully connects to mapquest geocoding", :vcr do
       connection = LocationService.connection
       expect(connection).to be_a(Faraday::Connection)
     end
