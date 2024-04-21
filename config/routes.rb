@@ -7,10 +7,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  
+
   namespace :api do
     namespace :v0 do
       get "/forecast", to: "forecasts#city"
+      post "/users", to: "users#create"
     end
   end
 end
