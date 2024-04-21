@@ -4,6 +4,6 @@ class Forecast < ApplicationRecord
   validates_presence_of :hourly_weather
 
   serialize :current_weather, Hash, coder: JSON
-  serialize :daily_weather, Hash, coder: JSON
+  serialize :daily_weather, Array, coder: JSON
   serialize :hourly_weather, Array, coder: JSON
 end
