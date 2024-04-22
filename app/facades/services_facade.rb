@@ -10,7 +10,8 @@ class ServicesFacade
     {
       destination: book_params[:location],
       forecast: book_forecast(book_params[:location]),
-      books: book_response[:docs].map { |data| Book.new(data) }
+      total_books_found: book_response[:numFound],
+      books: book_response[:docs].map { |data| Book.new(data.slice(:isbn, :title, :publisher)) }
     }
   end
 
