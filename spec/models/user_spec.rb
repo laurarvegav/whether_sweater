@@ -11,7 +11,7 @@ RSpec.describe User, type: :model do
   describe "instance methods" do
     before do
       @user_data = {
-        email: "person@woohoo.com",
+        email: "person1@woohoo.com",
         password: "abc123",
         password_confirmation: "abc123"
       }
