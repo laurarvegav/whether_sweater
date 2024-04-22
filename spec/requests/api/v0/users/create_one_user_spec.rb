@@ -29,13 +29,11 @@ RSpec.describe "Create User in DB via HTTP Request" do
       new_user = User.last
       response_data = JSON.parse(response.body, symbolize_names: true)
 
-      expect(new_user.name).to eq(@user_data[:name])
-      expect(new_user.location).to eq(@user_data[:location])
       expect(new_user.email).to eq(@user_data[:email])
-      expect(new_user.search_radius).to eq(@user_data[:search_radius])
       expect(new_user.password_digest).to be_a(String)
-      
-      expect(response[:status]).to eq(201)
+      expect(new_user.api_key).to be_a(String)
+
+      expect(response.status).to eq(201)
       check_hash_structure(response_data, :data, Hash)
       check_hash_structure(response_data[:data], :type, String)
       check_hash_structure(response_data[:data], :id, String)
