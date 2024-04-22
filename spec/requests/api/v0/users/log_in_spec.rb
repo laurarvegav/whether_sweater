@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe "Verify user logging in" do
   before(:each) do
     @user = User.create!({
-      email: "person@woohoo.com",
+      email: "person3@woohoo.com",
       password: "abc123",
       password_confirmation: "abc123"
     })
 
     @login_data = {
-      email: "person@woohoo.com",
+      email: "person3@woohoo.com",
       password: "abc123",
     }
 
