@@ -6,6 +6,6 @@ class Api::V0::UsersController < ApplicationController
 
   private
   def user_params
-    JSON.parse(params.keys.first).fetch('user', {})
+    params.permit(:email, :password, :password_confirmation)
   end
 end 
