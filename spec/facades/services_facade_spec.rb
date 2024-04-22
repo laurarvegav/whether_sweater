@@ -21,7 +21,7 @@ RSpec.describe ServicesFacade do
   end
 
   describe '.find_books' do
-    it "retuns a collection of book objects with title related to location in the requested quantity" do
+    it "retuns a collection of book objects with title related to location in the requested quantity", :vcr do
       book_params = {location: "denver,co", quantity: "5"}
       service = ServicesFacade.find_books(book_params)
       
