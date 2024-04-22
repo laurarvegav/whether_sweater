@@ -14,11 +14,10 @@ RSpec.describe "Book Search Controller returns" do
     describe "nested in a data hash" do
       it "correct format", :vcr do
         check_hash_structure(@response_data, :data, Hash)
-        check_hash_structure(@response_data[:data], :id, String)
         check_hash_structure(@response_data[:data], :attributes, Hash)
       end
       it "id key with null value", :vcr do
-        expect(@response_data[:id]).to be_null
+        expect(@response_data[:id]).to be_nil
       end
       describe "within attributes key" do
         it 'the destination city', :vcr do
@@ -26,6 +25,7 @@ RSpec.describe "Book Search Controller returns" do
         end 
         
         it "the forecast in that city right now", :vcr do
+          require 'pry'; binding.pry
           check_hash_structure(@response_attributes,:forecast, Hash)
           check_hash_structure(@response_attributes[:forecast], [:summary], String)
           check_hash_structure(@response_attributes[:forecast], [:temperature], String)
