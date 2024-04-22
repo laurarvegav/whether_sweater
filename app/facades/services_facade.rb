@@ -7,7 +7,8 @@ class ServicesFacade
 
   def self.find_books(book_params)
     response = BookService.search(book_params)
-    response.map do |data|
+
+    response[:docs].map do |data|
       Book.new(data)
     end
   end
