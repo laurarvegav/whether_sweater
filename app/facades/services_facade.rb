@@ -6,11 +6,20 @@ class ServicesFacade
   end
 
   def self.find_books(book_params)
-    response = BookService.search(book_params)
+    book_response = BookService.search(book_params)
+    {
+      destination: book_params[:location],
+      forecast: book_forecast(book_params[:location]),
+      books: book_response[:docs].map { |data| Book.new(data) }
+    }
+  end
 
-    response[:docs].map do |data|
-      Book.new(data)
-    end
+  def self.book_forecast(city)
+    current_forecast = city_forecast(city).current_weather
+    {
+      summary: current_forecast["condition"],
+      temperature: "#{current_forecast["temperature"]} F"
+    }
   end
 
   private
