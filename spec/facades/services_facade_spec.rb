@@ -6,9 +6,10 @@ RSpec.describe ServicesFacade do
   end
 
   describe '.city_forecast' do
-    it 'returns returns a forecast object', :vcr do
+    it 'returns returns a forecast object with weather data for the next 5 days', :vcr do
       forecast = ServicesFacade.city_forecast(@location)
       expect(forecast).to be_a(Forecast)
+      expect(forecast.daily_weather.size).to eq(5)
     end
   end
 
