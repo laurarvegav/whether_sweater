@@ -16,8 +16,15 @@ RSpec.describe "Create User in DB via HTTP Request" do
 
     @bad_user_data_2 = {
       email: "test@email.com",
-      password: "abc123"
+      password: "abc123",
+      password_confirmation: ""
     }
+
+    @bad_user_data_3 = {
+        email: "person@woohoo.com",
+        password: "abc123",
+        password_confirmation: "abc12"
+      }
 
     @headers = {"Content_Type" => "application/json", "Accept" => "application/json"}
   end
@@ -56,7 +63,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
       errors = error_response[:errors].first
 
       check_hash_structure(errors, :detail, String)
-      expect(errors[:detail]).to eq("Validation failed: Passwords don't match")
+      expect(errors[:detail]).to eq("Validation failed: Password confirmation doesn't match Password")
     end
 
     it "will return the correct error message and be unsuccessful if any attribute is left blank", :vcr do
@@ -71,19 +78,13 @@ RSpec.describe "Create User in DB via HTTP Request" do
       errors = error_response[:errors].first
 
       check_hash_structure(errors, :detail, String)
-      expect(errors[:detail]).to eq("Validation failed: Password Confirmation can't be blank")
+      expect(errors[:detail]).to eq("Validation failed: Password confirmation doesn't match Password")
     end
 
     it "will return the correct error message and be unsuccessful if the email is already associated to a user", :vcr do
       post "/api/v0/users", headers: @headers, params: JSON.generate(user: @user_data)
 
-      bad_user_data_3 = {
-        email: "person@woohoo.com",
-        password: "abc123",
-        password_confirmation: "abc12"
-      }
-
-      post "/api/v0/users", headers: @headers, params: JSON.generate(user: bad_user_data_3)
+      post "/api/v0/users", headers: @headers, params: JSON.generate(user: @bad_user_data_3)
 
       expect(response).not_to be_successful
 
@@ -94,7 +95,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
       errors = error_response[:errors].first
 
       check_hash_structure(errors, :detail, String)
-      expect(errors[:detail]).to eq("Validation failed: Incorrect combination of parameters")
+      expect(errors[:detail]).to eq("Validation failed: Email has already been taken, Password confirmation doesn't match Password")
     end
   end
 end
