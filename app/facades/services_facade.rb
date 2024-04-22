@@ -63,7 +63,7 @@ class ServicesFacade
   end
 
   def self.create_forecast_objects(data)
-    Forecast.create!(
+    Forecast.new(
       current_weather: data[:current_weather],
       daily_weather: data[:daily_weather].drop(1),
       hourly_weather: data[:hourly_weather]
