@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Create User in DB via HTTP Request" do
   before(:each) do
     @user_data = {
-      email: "person2@woohoo.com",
+      email: "test@woohoo.com",
       password: "abc123",
       password_confirmation: "abc123"
     }
@@ -21,7 +21,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
     }
 
     @bad_user_data_3 = {
-        email: "person2@woohoo.com",
+        email: "test@woohoo.com",
         password: "abc123",
         password_confirmation: "abc12"
       }
