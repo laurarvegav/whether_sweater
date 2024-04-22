@@ -1,5 +1,6 @@
 class Api::V0::ForecastsController < ApplicationController
   def city
-    render json: ForecastSerializer.format_forecast(params[:location])
+    forecast = ServicesFacade.city_forecast(params[:location])
+    render json: ForecastSerializer.new(forecast)
   end
 end
