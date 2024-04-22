@@ -36,6 +36,10 @@ RSpec.describe ServicesFacade do
       check_hash_structure(@service[:forecast], :temperature, String)
     end
 
+    it "total books found associated to an integer", :vcr do
+      expect(@service[:total_books_found]).to be_a(Integer)
+    end
+
     it "books associated to a collection of book objects with title related to location in the requested quantity", :vcr do
       
       expect(@service[:books]).to be_an(Array)
