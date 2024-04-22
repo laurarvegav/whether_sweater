@@ -18,7 +18,7 @@ class ServicesFacade
   def self.book_forecast(city)
     current_forecast = city_forecast(city).current_weather
     {
-      summary: current_forecast["condition"],
+      summary: current_forecast[:condition],
       temperature: "#{current_forecast["temperature"]} F"
     }
   end
