@@ -7,10 +7,12 @@ class ForecastSerializer
 
   def self.format_forecast(city)
     forecast = ServicesFacade.city_forecast(city)
-   {
-      id: nil,
-      type: forecast.class.to_s.downcase!,
-      attributes: forecast.attributes.except("id")
+    {data:
+    {
+        id: nil,
+        type: forecast.class.to_s.downcase!,
+        attributes: forecast.attributes.except("id", "updated_at", "created_at")
+      }
     }
   end
 end
