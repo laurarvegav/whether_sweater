@@ -2,7 +2,7 @@ require 'securerandom'
 
 class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
-  validates :password, presence: { on: :create }, confirmation: true 
+  validates :password, presence: { on: :create }
 
   has_secure_password
   before_create :generate_api_key
