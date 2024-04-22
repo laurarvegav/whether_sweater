@@ -11,9 +11,12 @@ RSpec.describe Forecast do
       )
       
       expect(forecast).to be_a(Forecast)
+      
       expect(forecast.current_weather).to be_a(Hash)
+      
       expect(forecast.daily_weather).to be_an(Array)
       expect(forecast.daily_weather.all? { |daily| daily.is_a?(Hash)}).to be(true)
+      
       expect(forecast.hourly_weather).to be_an(Array)
       expect(forecast.hourly_weather.all? { |hourly| hourly.is_a?(Hash)}).to be(true)
     end
