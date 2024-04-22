@@ -20,13 +20,27 @@ RSpec.describe ServicesFacade do
     end
   end
 
-  describe '.find_books' do
-    it "retuns a collection of book objects with title related to location in the requested quantity", :vcr do
+  describe '.find_books retuns a hash with key' do
+    before do
       book_params = {location: "denver,co", quantity: "5"}
-      service = ServicesFacade.find_books(book_params)
+      @service = ServicesFacade.find_books(book_params)
+    end
+
+    it "destination associated to a string", :vcr do
+      expect(@service[:destination]).to be_a(String)
+    end
+
+    it "forecast associated to a hash with summary and temperature associated to strings", :vcr do
+      expect(@service[:forecast]).to be_a(Hash)
+      check_hash_structure(@service[:forecast], :summary, String)
+      check_hash_structure(@service[:forecast], :temperature, String)
+    end
+
+    it "books associated to a collection of book objects with title related to location in the requested quantity", :vcr do
       
-      expect(service).to be_an(Array)
-      service.each { |book| expect(book).to be_a(Book) }
+      expect(@service[:books]).to be_an(Array)
+
+      @service[:books].each { |book| expect(book).to be_a(Book) }
     end
   end
 end
