@@ -31,7 +31,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
 
   describe '#happy path' do
     it "can create a new user", :vcr do
-      post "/api/v0/users", headers: @headers, params: JSON.generate(user: @user_data)
+      post "/api/v0/users", headers: @headers, params: { user: @user_data }.to_json
 
       new_user = User.last
       response_data = JSON.parse(response.body, symbolize_names: true)
@@ -52,7 +52,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
 
   describe '#sad path' do
     it "will return the correct error message and be unsuccessful if the passwords don't match", :vcr do
-      post "/api/v0/users", headers: @headers, params: JSON.generate(user: @bad_user_data_1)
+      post "/api/v0/users", headers: @headers, params: { user: @bad_user_data_1 }.to_json
       
       expect(response).not_to be_successful
 
@@ -67,7 +67,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
     end
 
     it "will return the correct error message and be unsuccessful if any attribute is left blank", :vcr do
-      post "/api/v0/users", headers: @headers, params: JSON.generate(user: @bad_user_data_2)
+      post "/api/v0/users", headers: @headers, params: { user: @bad_user_data_2 }.to_json 
 
       expect(response).not_to be_successful
 
@@ -84,7 +84,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
     it "will return the correct error message and be unsuccessful if the email is already associated to a user", :vcr do
       post "/api/v0/users", headers: @headers, params: JSON.generate(user: @user_data)
 
-      post "/api/v0/users", headers: @headers, params: JSON.generate(user: @bad_user_data_3)
+      post "/api/v0/users", headers: @headers, params: { user: @bad_user_data_3 }.to_json
 
       expect(response).not_to be_successful
 
