@@ -6,7 +6,7 @@ RSpec.describe "Search Controller" do
       get "/api/v0/forecast?location=denver,co"
       expect(response.status).to eq(200)
 
-      @response_data = JSON.parse(response.body, symbolize_names: true)
+      @response_data = JSON.parse(response.body, symbolize_names: true)[:data]
     end
 
     it 'returns the weather for a city', :vcr do
@@ -49,6 +49,9 @@ RSpec.describe "Search Controller" do
     end
 
     it 'does not return unnecessary data for a city', :vcr do
+      expect(@response_data).not_to have_key(:updated_at)
+      expect(@response_data).not_to have_key(:created_at)
+      
       expect(@response_data[:attributes][:current_weather]).not_to have_key(:is_day)
       expect(@response_data[:attributes][:current_weather]).not_to have_key(:wind_mph)
       expect(@response_data[:attributes][:current_weather]).not_to have_key(:wind_degree)
