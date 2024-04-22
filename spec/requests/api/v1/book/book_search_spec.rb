@@ -12,12 +12,12 @@ RSpec.describe "Book Search Controller returns" do
     end
     
     describe "nested in a data hash" do
-      it "correct format" do
+      it "correct format", :vcr do
         check_hash_structure(@response_data, :data, Hash)
         check_hash_structure(@response_data[:data], :id, String)
         check_hash_structure(@response_data[:data], :attributes, Hash)
       end
-      it "id key with null value" do
+      it "id key with null value", :vcr do
         expect(@response_data[:id]).to be_null
       end
       describe "within attributes key" do
@@ -36,7 +36,7 @@ RSpec.describe "Book Search Controller returns" do
           check_hash_structure(@response_attributes,:total_books_found, Integer)
         end
     
-        it "a collection of 5 books about the destination city" do
+        it "a collection of 5 books about the destination city", :vcr do
           check_hash_structure(@response_attributes,:books, Array)
           expect(@response_attributes[:books].size).to eq(5)
           @response_attributes[:books].each { |book|
