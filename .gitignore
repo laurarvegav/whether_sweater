@@ -41,4 +41,4 @@
 /coverage/*
 
 #Ignore vcr fixtures
-/spec/fixtures/*
+/spec/fixtures/vcr_cassettes
