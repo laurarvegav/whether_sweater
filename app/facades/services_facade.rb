@@ -55,7 +55,6 @@ class ServicesFacade
 
   def self.parse_hourly(hourly_input)
     {
-      #Find out time method
       time: Time.parse(hourly_input[:time]).strftime("%H:%M"),
       temperature: hourly_input[:temp_f],
       conditions: hourly_input[:condition][:text],
@@ -66,7 +65,7 @@ class ServicesFacade
   def self.create_forecast_objects(data)
     Forecast.create!(
       current_weather: data[:current_weather],
-      daily_weather: data[:daily_weather],
+      daily_weather: data[:daily_weather].drop(1),
       hourly_weather: data[:hourly_weather]
     )
   end
