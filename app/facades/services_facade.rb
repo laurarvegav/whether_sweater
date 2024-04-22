@@ -5,6 +5,13 @@ class ServicesFacade
     create_forecast_objects(forecast_data)
   end
 
+  def self.find_books(book_params)
+    response = BookService.search(book_params)
+    response.map do |data|
+      Book.new(data)
+    end
+  end
+
   private
   def self.format_coordinates(city)
     coordinates = LocationService.search(city)
