@@ -12,7 +12,7 @@ class WeatherService
   end
 
   def self.search(coordinates)
-    data = get_url("v1/forecast.json?q=#{coordinates}&days=5")
+    data = get_url("v1/forecast.json?q=#{coordinates}&days=6")
     
     { 
       current: data[:current], 
