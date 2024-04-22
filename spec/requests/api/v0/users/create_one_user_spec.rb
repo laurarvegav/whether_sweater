@@ -21,7 +21,7 @@ RSpec.describe "Create User in DB via HTTP Request" do
     }
 
     @bad_user_data_3 = {
-        email: "person@woohoo.com",
+        email: "person2@woohoo.com",
         password: "abc123",
         password_confirmation: "abc12"
       }
