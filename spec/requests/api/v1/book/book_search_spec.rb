@@ -25,10 +25,9 @@ RSpec.describe "Book Search Controller returns" do
         end 
         
         it "the forecast in that city right now", :vcr do
-          require 'pry'; binding.pry
           check_hash_structure(@response_attributes,:forecast, Hash)
-          check_hash_structure(@response_attributes[:forecast], [:summary], String)
-          check_hash_structure(@response_attributes[:forecast], [:temperature], String)
+          check_hash_structure(@response_attributes[:forecast], :summary, String)
+          check_hash_structure(@response_attributes[:forecast], :temperature, String)
           expect(@response_attributes[:forecast][:temperature].include?(" F")).to eq(true)
         end
     
