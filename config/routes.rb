@@ -14,5 +14,9 @@ Rails.application.routes.draw do
       post "/users", to: "users#create"
       post "/sessions", to: "sessions#create"
     end
+
+    namespace :v1 do
+      get "/book-search", to: "books#search"
+    end
   end
 end
