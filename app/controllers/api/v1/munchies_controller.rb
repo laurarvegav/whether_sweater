@@ -5,6 +5,7 @@ class Api::V1::MunchiesController < ApplicationController
         id: nil,
         type: "munchie",
         attributes: {
+          destination_city: params[:destination],
           forecast: forecast,
           restaurant: munchie
         }
@@ -20,7 +21,7 @@ class Api::V1::MunchiesController < ApplicationController
       name: munchie.name,
       address: munchie.address,
       rating: munchie.rating,
-      reviews: munchie.review
+      reviews: munchie.reviews
     }
   end
 
@@ -31,7 +32,12 @@ class Api::V1::MunchiesController < ApplicationController
 
     {
       temperature: forecast.current_weather[:temperature],
-      condition: forecast.current_weather[:condition]
+      summary: forecast.current_weather[:condition]
     }
+  end
+
+  private
+  def munchie_params
+    params.permit(:destination, :food)
   end
 end
