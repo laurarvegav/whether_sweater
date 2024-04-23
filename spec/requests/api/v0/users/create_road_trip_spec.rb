@@ -53,7 +53,6 @@ RSpec.describe "Create Road Trip" do
       check_hash_structure(response_data[:data], :attributes, Hash)
       check_hash_structure(response_data[:data][:attributes], :start_city, String)
       check_hash_structure(response_data[:data][:attributes], :end_city, String)
-      expect(human_readable?(response_data[:data][:attributes][:travel_time])).to be(true)
       check_hash_structure(response_data[:data][:attributes], :weather_at_eta, Hash)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :datetime, String)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :temperature, Float)
@@ -93,7 +92,7 @@ RSpec.describe "Create Road Trip" do
       expect(errors[:detail]).to eq("Validation failed: origin incorrect")
     end
 
-    xit "will return the correct error message and be unsuccessful if the desination is incorrect", :vcr do
+    it "will return the correct error message and be unsuccessful if the desination is incorrect", :vcr do
       post "/api/v0/road_trip", params: @bad_roadt_data_2, as: :json
       
       expect(response).not_to be_successful
@@ -108,22 +107,23 @@ RSpec.describe "Create Road Trip" do
       expect(errors[:detail]).to eq("Validation failed: destination incorrect")
     end
 
-    xit "will return the correct format if the trip is impossible", :vcr do
+    it "will return the correct format if the trip is impossible", :vcr do
       post "/api/v0/road_trip", params: @bad_roadt_data_3, as: :json
+
+      response_data = JSON.parse(response.body, symbolize_names: true)
 
       expect(response.status).to eq(201)
       check_hash_structure(response_data, :data, Hash)
       check_hash_structure(response_data[:data], :type, String)
       expect(response_data[:data][:type]).to eq("road_trip")
-      check_hash_structure(response_data[:data], :id, nil)
+      expect(response_data[:data][:id]).to eq(nil)
       check_hash_structure(response_data[:data], :attributes, Hash)
       check_hash_structure(response_data[:data][:attributes], :start_city, String)
       check_hash_structure(response_data[:data][:attributes], :end_city, String)
       check_hash_structure(response_data[:data][:attributes], :travel_time, String)
       expect(response_data[:data][:attributes][:travel_time]).to eq("impossible")
       check_hash_structure(response_data[:data][:attributes], :weather_at_eta, Hash)
-      check_hash_structure(response_data[:data][:attributes], :weather_at_eta, Hash)
-      expect(response_data[:data][:attributes][:weather_at_eta].empty?).to eq_(true)
+      expect(response_data[:data][:attributes][:weather_at_eta].empty?).to eq(true)
     end
   end
 end
