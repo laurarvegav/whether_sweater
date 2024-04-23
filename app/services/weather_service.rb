@@ -11,12 +11,7 @@ class WeatherService
     JSON.parse(response.body, symbolize_names: true)
   end
 
-  def self.search(coordinates)
-    data = get_url("v1/forecast.json?q=#{coordinates}&days=6")
-    
-    { 
-      current: data[:current], 
-      forecast: data[:forecast][:forecastday] 
-    }
+  def self.search(coordinates, hour = "00", days = 5)
+    get_url("v1/forecast.json?q=#{coordinates}&days=#{days+1}")
   end
 end
