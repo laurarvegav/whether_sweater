@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
     namespace :v1 do
       get "/book-search", to: "books#search"
+      get "/munchies", to: "munchies#search"
     end
   end
 end
