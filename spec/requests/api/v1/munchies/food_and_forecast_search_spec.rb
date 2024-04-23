@@ -14,7 +14,7 @@ Rspec.describe "Munchies and Forecast" do
 
   describe "#happy path" do
     it "retrieves food and forecast information for a destination city" do
-      get "/api/v1/munchies?#{@destination}&food=#{@italian}"
+      get "/api/v1/munchies?destination=#{@destination}&food=#{@italian}"
 
       response_data = JSON.parse(response.body, symbolize_names: true)
 
