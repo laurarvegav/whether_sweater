@@ -1,6 +1,8 @@
 class Api::V0::ForecastsController < ApplicationController
   def city
-    forecast = WeatherFacade.city_forecast(params[:location])
+    coordinates = LocationFacade.format_coordinates(params[:location])
+
+    forecast = WeatherFacade.city_forecast(coordinates)
     
     output = {
       data: {
