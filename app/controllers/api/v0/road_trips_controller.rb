@@ -2,7 +2,7 @@ class Api::V0::RoadTripsController < ApplicationController
   def create
     user = User.find_by(api_key: params[:api_key])
 
-    if user
+    if user && road_trip_params.include?(nil)
       output = {
         data: {
           id: nil,

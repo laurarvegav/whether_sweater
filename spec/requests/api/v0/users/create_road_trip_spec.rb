@@ -55,14 +55,14 @@ RSpec.describe "Create Road Trip" do
       check_hash_structure(response_data[:data][:attributes], :end_city, String)
       expect(human_readable?(response_data[:data][:attributes][:travel_time])).to be(true)
       check_hash_structure(response_data[:data][:attributes], :weather_at_eta, Hash)
-      expect(human_readable?(response_data[:data][:attributes][:weather_at_eta][:datetime])).to be(true)
+      check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :datetime, String)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :temperature, Float)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :condition, String)
     end
   end
 
   describe '#sad path' do
-    xit "will return the correct error message and be unsuccessful if the request comes without api key", :vcr do
+    it "will return the correct error message and be unsuccessful if the request comes without api key", :vcr do
       post "/api/v0/road_trip", params: @bad_roadt_data_0, as: :json
 
       expect(response).not_to be_successful
@@ -78,7 +78,7 @@ RSpec.describe "Create Road Trip" do
       expect(errors[:detail]).to eq("Unauthorized")
     end
 
-    xit "will return the correct error message and be unsuccessful if the origin is incorrect", :vcr do
+    it "will return the correct error message and be unsuccessful if the origin is incorrect", :vcr do
       post "/api/v0/road_trip", params: @bad_roadt_data_1, as: :json
       
       expect(response).not_to be_successful

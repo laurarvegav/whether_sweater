@@ -15,11 +15,9 @@ class WeatherFacade
     string_datetime = Time.parse(datetime.to_s).strftime("%Y-%m-%d %H:%M")
 
     {
-      weather_at_eta: {
-        datetime: string_datetime,
-        temperature: forecast.current_weather[:temperature],
-        condition: forecast.current_weather[:condition]
-      }
+      datetime: string_datetime,
+      temperature: forecast.current_weather[:temperature],
+      condition: forecast.current_weather[:condition]
     }
   end
  

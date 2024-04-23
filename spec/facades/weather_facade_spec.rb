@@ -26,15 +26,12 @@ RSpec.describe WeatherFacade do
     before do
       roadt_params = {origin: "denver,co", destination: "broomfield,co"}
       distance = 33.minutes + 19.seconds
-
-      road_trip = RoadTrip.new(roadt_params)
       @service = WeatherFacade.road_trip_weather(@coordinates, distance)
     end
     it "datetime, temperature and condition", :vcr do
-      check_hash_structure(@service, :weather_at_eta, Hash)
-      check_hash_structure(@service[:weather_at_eta], :datetime, String)
-      check_hash_structure(@service[:weather_at_eta], :temperature, Float)
-      check_hash_structure(@service[:weather_at_eta], :condition, String)
+      check_hash_structure(@service, :datetime, String)
+      check_hash_structure(@service, :temperature, Float)
+      check_hash_structure(@service, :condition, String)
     end
   end
 end
