@@ -1,6 +1,6 @@
 class Api::V1::BooksController < ApplicationController
   def search
-    service = BoookFacade.find_books(book_params)
+    service = BookFacade.find_books(book_params)
 
     output = {
       data: {
