@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       get "/forecast", to: "forecasts#city"
       post "/users", to: "users#create"
       post "/sessions", to: "sessions#create"
-      post "/road_trip", to: "reoad_trips#create"
+      post "/road_trip", to: "road_trips#create"
     end
 
     namespace :v1 do
