@@ -1,10 +1,26 @@
-class WeatherFacade
-  def self.city_forecast(city)
-    coordinates = LocationFacade.format_coordinates(city)
+require 'active_support/all'
 
+class WeatherFacade
+  def self.city_forecast(coordinates, unixdt=nil)
     response = WeatherService.search(coordinates)
     forecast_data = parse_response(response)
-    create_forecast_objects(forecast_data)
+    create_forecast_object(forecast_data)
+  end
+
+  def self.road_trip_weather(coordinates, duration)
+    datetime = Time.current + duration
+    unixdt = (datetime + 1.day).to_i
+    
+    forecast = city_forecast(coordinates, unixdt)
+    string_datetime = Time.parse(datetime.to_s).strftime("%Y-%m-%d %H:%M")
+
+    {
+      weather_at_eta: {
+        datetime: string_datetime,
+        temperature: forecast.current_weather[:temperature],
+        condition: forecast.current_weather[:condition]
+      }
+    }
   end
  
   private  
@@ -13,12 +29,12 @@ class WeatherFacade
     current_weather: parse_current(response[:current]),
 
     daily_weather:  
-      response[:forecast].map do |daily_input|
+      response[:forecast][:forecastday].map do |daily_input|
         parse_daily(daily_input)
       end,
 
     hourly_weather: 
-      response[:forecast][0][:hour].map do |hourly_input|
+      response[:forecast][:forecastday][0][:hour].map do |hourly_input|
         parse_hourly(hourly_input)
       end
     }
@@ -58,7 +74,7 @@ class WeatherFacade
     }
   end
 
-  def self.create_forecast_objects(data)
+  def self.create_forecast_object(data)
     Forecast.new(
       current_weather: data[:current_weather],
       daily_weather: data[:daily_weather].drop(1),
