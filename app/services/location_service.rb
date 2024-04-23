@@ -1,6 +1,6 @@
 class LocationService
   def self.connection
-    Faraday.new(url: "https://www.mapquestapi.com/geocoding") do |faraday|
+    Faraday.new(url: "https://www.mapquestapi.com") do |faraday|
       faraday.params["key"] = Rails.application.credentials.mapquest["key"]
     end
   end
@@ -12,8 +12,10 @@ class LocationService
   end
 
   def self.search(location)
-    data = get_url("v1/address?location=#{location}")
-    
-    data[:results].first[:locations].first[:latLng] 
+    get_url("geocoding/v1/address?location=#{location}") 
+  end
+
+  def self.road_trip(from, to)
+    get_url("directions/v2/route?from=#{from}&to=#{to}")
   end
 end

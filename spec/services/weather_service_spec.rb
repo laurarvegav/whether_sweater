@@ -36,12 +36,15 @@ RSpec.describe WeatherService do
       check_hash_structure(service[:current][:condition], :icon, String)
     end
     
-    it "returns a hash with forecast key associated to an array of 6 size", :vcr do
+    it "returns a hash with forecast key associated to forecastday associated to an array of the unidxt", :vcr do
       service = WeatherService.search(coordinates)
+      service_unidtx = WeatherService.search(coordinates, 1713956706)
 
-      check_hash_structure(service, :forecast, Array)
-      expect(service[:forecast].size).to eq(6)
-      service[:forecast].each do |day_service|
+      check_hash_structure(service[:forecast], :forecastday, Array)
+      expect(service[:forecast][:forecastday].size).to eq(6)
+      expect(service_unidtx[:forecast][:forecastday].size).to eq(1)
+
+      service[:forecast][:forecastday].each do |day_service|
         expect(day_service).to be_a(Hash)
         check_hash_structure(day_service, :date_epoch, Integer)
 

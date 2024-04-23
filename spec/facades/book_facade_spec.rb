@@ -1,23 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe ServicesFacade do
-  before do
-    @location = "Denver,CO"
-  end
-  
-  describe '.city_forecast' do
-    it 'returns a forecast object with weather data for the next 5 days', :vcr do
-      forecast = ServicesFacade.city_forecast(@location)
-      
-      expect(forecast).to be_a(Forecast)
-      expect(forecast.daily_weather.size).to eq(5)
-    end
-  end
-
+RSpec.describe BookFacade do
   describe '.find_books retuns a hash with key' do
     before do
       book_params = {location: "denver,co", quantity: "5"}
-      @service = ServicesFacade.find_books(book_params)
+      @service = BookFacade.find_books(book_params)
     end
 
     it "destination associated to a string", :vcr do
@@ -35,7 +22,6 @@ RSpec.describe ServicesFacade do
     end
 
     it "books associated to a collection of book objects with title related to location in the requested quantity", :vcr do
-      
       expect(@service[:books]).to be_an(Array)
 
       @service[:books].each { |book| expect(book).to be_a(Book) }
