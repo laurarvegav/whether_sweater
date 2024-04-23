@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-Rspec.describe "Munchies and Forecast" do
+RSpec.describe "Munchies and Forecast" do
   before do
     @user_1 = User.create!({
       email: "person3@test.fake",
@@ -13,7 +13,7 @@ Rspec.describe "Munchies and Forecast" do
   end
 
   describe "#happy path" do
-    it "retrieves food and forecast information for a destination city" do
+    it "retrieves food and forecast information for a destination city", :vcr do
       get "/api/v1/munchies?destination=#{@destination}&food=#{@italian}"
 
       response_data = JSON.parse(response.body, symbolize_names: true)
@@ -26,11 +26,11 @@ Rspec.describe "Munchies and Forecast" do
       check_hash_structure(response_data[:data], :attributes, Hash)
       check_hash_structure(response_data[:data][:attributes], :destination_city, String)
       check_hash_structure(response_data[:data][:attributes], :forecast, Hash)
-      check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :summary, String)
-      check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :temperature, Float)
+      check_hash_structure(response_data[:data][:attributes][:forecast], :summary, String)
+      check_hash_structure(response_data[:data][:attributes][:forecast], :temperature, Float)
       check_hash_structure(response_data[:data][:attributes], :restaurant, Hash)
-      check_hash_structure(response_data[:data][:attributes][:restaurant], :name, Hash)
-      check_hash_structure(response_data[:data][:attributes][:restaurant], :address, Hash)
+      check_hash_structure(response_data[:data][:attributes][:restaurant], :name, String)
+      check_hash_structure(response_data[:data][:attributes][:restaurant], :address, String)
       check_hash_structure(response_data[:data][:attributes][:restaurant], :rating, Float)
       check_hash_structure(response_data[:data][:attributes][:restaurant], :reviews, Integer)
     end
