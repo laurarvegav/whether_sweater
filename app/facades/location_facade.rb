@@ -13,10 +13,13 @@ class LocationFacade
     
     time_string = data[:route][:formattedTime]
     
-    hours, minutes, seconds = time_string.split(':').map(&:to_i)
-
-    # Construct a ActiveSupport::Duration object
-    duration = 1.day + hours.hours + minutes.minutes + seconds.seconds
+    if time_string.nil?
+      duration = "impossible"
+    else
+      hours, minutes, seconds = time_string.split(':').map(&:to_i)
+      # Construct a ActiveSupport::Duration object
+      duration = 1.day + hours.hours + minutes.minutes + seconds.seconds
+    end
 
     {
       time: time_string,
