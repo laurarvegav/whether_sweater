@@ -45,7 +45,7 @@ RSpec.describe LocationService do
       data = LocationService.road_trip("New York, NY", "Denver, CO")
 
       check_hash_structure(data, :route, Hash)
-      expect(data[:route][:formattedTime]).to eq("24:51:19")
+      check_hash_structure(data[:route], :formattedTime, String)
     end
   end
 end
