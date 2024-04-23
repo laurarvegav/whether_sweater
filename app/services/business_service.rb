@@ -1,7 +1,7 @@
 class BusinessService
   def self.connection
     Faraday.new(url: "https://api.yelp.com") do |faraday|
-      faraday.headers["Authorization"] = "Bearer #{Rails.application.credentials.yelp["key"]}"
+      faraday.headers["Authorization"] = Rails.application.credentials.yelp["key"]
     end
   end
 
