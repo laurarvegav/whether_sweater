@@ -3,6 +3,6 @@ class RoadTrip
 
   def initialize(data)
     @start_city = data[:origin]
-    @end_city = data[:desination]
+    @end_city = data[:destination]
   end
 end
