@@ -1,8 +1,8 @@
-class RoadTripsController < ApplicationController
+class Api::V0::RoadTripsController < ApplicationController
   def create
     user = User.find_by(api_key: params[:api_key])
 
-    if valid?(user)
+    if user
       output = {
         data: {
           id: nil,
@@ -11,7 +11,7 @@ class RoadTripsController < ApplicationController
         }
       }
  
-    render json: output, status: :ok
+    render json: output, status: 201
     else
       render json: ErrorSerializer.new(ErrorMessage.new("Unauthorized", 422)).serialize_json, status: 401
     end
@@ -19,13 +19,16 @@ class RoadTripsController < ApplicationController
 
   private
   def road_trip
-    service = LocationFacade.find_road_trip(road_trip_params)
-    road_t = service[:road_trip]
+    time = LocationFacade.road_trip_time(road_trip_params)
+    coordinates = LocationFacade.format_coordinates(params[:destination])
+
+    weather_at_eta = WeatherFacade.road_trip_weather(coordinates, time[:duration])
+
     {
-      start_city: road_t.start_city, 
-      end_city: road_t.end_city,
-      travel_time: service[:travel_time],
-      weather_at_eta: WeatherFacade.road_trip_weather(road_t)
+      start_city: params[:origin], 
+      end_city: params[:destination],
+      travel_time: time[:time],
+      weather_at_eta: weather_at_eta
     }
   end
 

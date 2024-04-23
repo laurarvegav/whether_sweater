@@ -49,7 +49,7 @@ RSpec.describe "Create Road Trip" do
       check_hash_structure(response_data, :data, Hash)
       check_hash_structure(response_data[:data], :type, String)
       expect(response_data[:data][:type]).to eq("road_trip")
-      check_hash_structure(response_data[:data], :id, nil)
+      expect(response_data[:data][:id]).to eq(nil)
       check_hash_structure(response_data[:data], :attributes, Hash)
       check_hash_structure(response_data[:data][:attributes], :start_city, String)
       check_hash_structure(response_data[:data][:attributes], :end_city, String)
