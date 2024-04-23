@@ -8,13 +8,35 @@ RSpec.describe "Create Road Trip" do
       password_confirmation: "abc123"
     })
 
-    @headers = {"Content_Type" => "application/json", "Accept" => "application/json"}
     @roadt_data = {
       "origin": "Cincinatti,OH",
       "destination": "Chicago,IL",
       "api_key": @user_1.api_key
     }
 
+    @bad_roadt_data_0 = {
+      "origin": "Cincinatti,OH",
+      "destination": "Chicago,IL",
+      "api_key": ""
+    }
+
+    @bad_roadt_data_1 = {
+      "origin": "",
+      "destination": "Chicago,IL",
+      "api_key": @user_1.api_key
+    }
+
+    @bad_roadt_data_2 = {
+      "origin": "Cincinatti,OH",
+      "destination": "",
+      "api_key": @user_1.api_key
+    }
+
+    @bad_roadt_data_3 = {
+      "origin": "New York, NY",
+      "destination": "London, UK",
+      "api_key": @user_1.api_key
+    }
   end
 
   describe '#happy path' do
@@ -31,9 +53,9 @@ RSpec.describe "Create Road Trip" do
       check_hash_structure(response_data[:data], :attributes, Hash)
       check_hash_structure(response_data[:data][:attributes], :start_city, String)
       check_hash_structure(response_data[:data][:attributes], :end_city, String)
-      check_hash_structure(response_data[:data][:attributes], :travel_time, String)
+      expect(human_readable?(response_data[:data][:attributes][:travel_time])).to be(true)
       check_hash_structure(response_data[:data][:attributes], :weather_at_eta, Hash)
-      check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :datetime, String)
+      expect(human_readable?(response_data[:data][:attributes][:weather_at_eta][:datetime])).to be(true)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :temperature, Float)
       check_hash_structure(response_data[:data][:attributes][:weather_at_eta], :condition, String)
     end
@@ -44,6 +66,7 @@ RSpec.describe "Create Road Trip" do
       post "/api/v0/road_trip", params: @bad_roadt_data_0, as: :json
 
       expect(response).not_to be_successful
+      expect(response.status).to eq(401)
 
       error_response = JSON.parse(response.body, symbolize_names: true)
 
@@ -52,7 +75,7 @@ RSpec.describe "Create Road Trip" do
       errors = error_response[:errors].first
 
       check_hash_structure(errors, :detail, String)
-      expect(errors[:detail]).to eq("Validation failed: API key needed")
+      expect(errors[:detail]).to eq("Unauthorized")
     end
 
     xit "will return the correct error message and be unsuccessful if the origin is incorrect", :vcr do

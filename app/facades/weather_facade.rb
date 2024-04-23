@@ -1,35 +1,13 @@
-class ServicesFacade
+class WeatherFacade
   def self.city_forecast(city)
-    response = WeatherService.search(format_coordinates(city))
+    coordinates = LocationFacade.format_coordinates(city)
+
+    response = WeatherService.search(coordinates)
     forecast_data = parse_response(response)
     create_forecast_objects(forecast_data)
   end
-
-  def self.find_books(book_params)
-    book_response = BookService.search(book_params)
-    {
-      destination: book_params[:location],
-      forecast: book_forecast(book_params[:location]),
-      total_books_found: book_response[:numFound],
-      books: book_response[:docs].map { |data| Book.new(data.slice(:isbn, :title, :publisher)) }
-    }
-  end
-
-  def self.book_forecast(city)
-    current_forecast = city_forecast(city).current_weather
-    {
-      summary: current_forecast[:condition],
-      temperature: "#{current_forecast["temperature"]} F"
-    }
-  end
-
-  private
-  def self.format_coordinates(city)
-    coordinates = LocationService.search(city)
-
-    coordinates.values.join(',')
-  end
-  
+ 
+  private  
   def self.parse_response(response)
     {
     current_weather: parse_current(response[:current]),
@@ -47,7 +25,7 @@ class ServicesFacade
   end
 
   def self.parse_current(input_current)
-    current_weather_data = {
+    {
       last_updated: DateTime.parse(input_current[:last_updated]),
       temperature: input_current[:temp_f],
       feels_like: input_current[:feelslike_f],
