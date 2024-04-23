@@ -1,3 +1,5 @@
+require 'active_support/all'
+
 class WeatherService
   def self.connection
     Faraday.new(url: "http://api.weatherapi.com/") do |faraday|
@@ -11,7 +13,11 @@ class WeatherService
     JSON.parse(response.body, symbolize_names: true)
   end
 
-  def self.search(coordinates, hour = "00", days = 5)
-    get_url("v1/forecast.json?q=#{coordinates}&days=#{days+1}")
+  def self.search(coordinates, unixdt=nil)
+    if unixdt
+      get_url("v1/forecast.json?q=#{coordinates}&unixdt=#{unixdt}")
+    else
+      get_url("v1/forecast.json?q=#{coordinates}&days=6")
+    end
   end
 end
